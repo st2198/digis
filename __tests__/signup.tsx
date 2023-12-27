@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Signup from '../';
+import Signup from '../src/pages/signup';
 
 describe('Signup', () => {
     beforeAll(() => {
@@ -30,7 +30,6 @@ describe('Signup', () => {
     fireEvent.click(screen.getAllByText(/Sign Up/)[1]);
 
     expect(window.localStorage.setItem).toHaveBeenCalledWith('newuser', JSON.stringify({ username: 'newuser', password: 'password123' }));
-    // Optionally, check if the user is redirected to the login page
   });
 
   it('shows an error message for an existing username', () => {
