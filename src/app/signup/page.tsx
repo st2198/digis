@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { AuthFormType } from '@/services/types';
 import { usernameValidation, passwordValidation } from '@/services/validationRules';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/Layout';
 
 const Signup = () => {
     const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthFormType>();
