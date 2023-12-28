@@ -17,6 +17,7 @@
 /build
 
 # misc
+.swc
 .vscode
 .DS_Store
 *.pem

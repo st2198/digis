@@ -29,7 +29,7 @@ npm run dev
 - `npm start`: Starts a Next.js production server.
 - `npm run lint`: Lints the project files.
 - `npm test`: Runs Jest tests.
-- `npm run playwright`: Executes Playwright end-to-end tests.
+- `npm run playwright`: Executes Playwright end-to-end tests. Note: Run `npm run dev` in one terminal and `npm run playwright` in another terminal in parallel for end-to-end testing.
 - `npm run playwright:debug`: Runs Playwright tests in debug mode.
 
 ## Technologies
