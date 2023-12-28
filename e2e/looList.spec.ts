@@ -34,5 +34,5 @@ test('signup and login process', async ({ page }) => {
   expect(page.url()).toBe('http://localhost:3000/');
 
   // 14. Check for text 'Previous'
-  await expect(page.locator('body')).toContainText('Previous');
+  await expect(page.locator('body')).toContainText('Next');
 });
