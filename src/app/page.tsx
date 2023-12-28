@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { LOO_BY_ID_QUERY, LOO_QUERY } from "@/services/queries/looQuery";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { Header } from "@/components";
+import { Header, TableWithPagination } from "@/components";
 
 type Loo = {
   id: string;
@@ -17,13 +17,15 @@ type Loo = {
 
 export default function Home() {
   const [isUserAuth, setUserAuth] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
+  const [isActive, setIsActive] = useState(true)
   const [looId, setLooId] = useState("")
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   }
 
-  const { data: loosData } = useSuspenseQuery<{ loos: { loos: Loo[] } }>(LOO_QUERY, { variables: { page: currentPage } })
+  const { data: loosData } = useSuspenseQuery<{ loos: { loos: Loo[] } }>(LOO_QUERY, { variables: { page: currentPage, active: isActive } })
   const { data: looData } = useSuspenseQuery<{ loo: Loo }>(LOO_BY_ID_QUERY, { variables: { id: looId }, skip: !looId })
 
   const loos = loosData?.loos?.loos
@@ -49,21 +51,16 @@ export default function Home() {
         <Header />
         <div className="flex gap-32">
           <div className="bg-white p-8 flex flex-col justify-center rounded-xl border min-w-96">
-            <ul>
-              {loos?.map(loo => (
-                <li key={loo.id} onClick={() => setLooId(loo.id)} className="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-                  {loo.name}
-                </li>
-              ))}
-            </ul>
-            <div className="pagination-controls flex gap-4 justify-center mt-16">
-              <button className={`px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${currentPage > 1 ? '' : 'invisible'}`} onClick={() => handlePageChange(currentPage - 1)}>
-                Previous
-              </button>
-              <button className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={() => handlePageChange(currentPage + 1)}>
-                Next
-              </button>
-            </div>
+            <TableWithPagination
+              loos={loos}
+              isActive={isActive}
+              currentPage={currentPage}
+              handleNextPageClick={() => handlePageChange(currentPage + 1)}
+              handlePrevPageClick={() => handlePageChange(currentPage - 1)}
+              onLooSelect={setLooId}
+              onActiveFilter={() => setIsActive(true)}
+              onNotActiveFilter={() => setIsActive(false)}
+            />
           </div>
 
           <div className={`bg-white p-8 flex flex-col justify-center items-center rounded-xl border min-w-96 ${selectedLoo ? '' : 'invisible'}`}>

@@ -5,7 +5,7 @@ import Image from 'next/image';
 type LayoutProps = {
     children: ReactNode;
 };
-const Layout: React.FC<LayoutProps> = ({ children }) => (
+export const Layout: React.FC<LayoutProps> = ({ children }) => (
     <div>
         <Header />
         <main className="flex justify-center items-center h-screen bg-gray-100 pt-16">
@@ -26,5 +26,3 @@ const Layout: React.FC<LayoutProps> = ({ children }) => (
         </main>
     </div>
 );
-
-export default Layout;

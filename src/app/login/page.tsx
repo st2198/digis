@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 import { AuthFormType } from '@/services/types';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/Layout';
 
 const Login = () => {
     const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthFormType>();
