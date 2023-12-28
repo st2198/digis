@@ -11,6 +11,9 @@ import {
 export function makeClient() {
   const httpLink = new HttpLink({
       uri: "https://www.toiletmap.org.uk/api",
+      headers: {
+        'Origin': 'https://digis.vercel.app'
+      }
   });
 
   return new NextSSRApolloClient({
