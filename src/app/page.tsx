@@ -1,41 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
-import { CHARACTERS_QUERY, CHARACTER_QUERY } from "@/services/queries/characterQuery";
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import React, { useState } from "react";
+
 import { Header, TableWithPagination } from "@/components";
-import { Character } from "@/services/types";
+import { useCharacterPagination } from '@/hooks/useCharacterPagination';
+import { useCharacterData } from '@/hooks/useCharacterData';
+import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 
-export default function Home() {
-  const [isUserAuth, setUserAuth] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [status, setStatus] = useState<"Alive" | "Dead">("Alive")
-  const [characterId, setCharacterId] = useState("")
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  }
-
-  const { data: charactersData } = useSuspenseQuery<{ characters: { results: Character[] } }>(CHARACTERS_QUERY, { variables: { page: currentPage, filter: { status } } })
-  const { data: characterData } = useSuspenseQuery<{ character: Character }>(CHARACTER_QUERY, { variables: { characterId: characterId }, skip: !characterId })
-
-  const characters = charactersData?.characters?.results
-  const character = characterData?.character
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const authUser = localStorage.getItem('authUser');
-
-    if (!authUser) {
-      router.push('/login');
-    } else {
-      setUserAuth(true);
-    }
-
-  }, [router]);
-
+const Home = () => {
+  const isUserAuth = useAuthRedirect('/login');
+  const { currentPage, handlePageChange, status, setStatus } = useCharacterPagination();
+  const [characterId, setCharacterId] = useState("");
+  const { characters, character } = useCharacterData(currentPage, status, characterId);
 
   return (
     isUserAuth && (
@@ -70,3 +46,5 @@ export default function Home() {
     )
   )
 }
+
+export default Home;
