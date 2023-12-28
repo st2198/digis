@@ -3,30 +3,30 @@ import { Character } from "@/services/types";
 
 type TableWithPaginationProps = {
     characters: Character[],
-    isMale: boolean,
+    isAlive: boolean,
     currentPage: number,
     handleNextPageClick: () => void
     handlePrevPageClick: () => void
     onCharacterSelect: (id: string) => void
-    onMaleFilter: () => void
-    onFemaleFilter: () => void
+    onAliveFilter: () => void
+    onDeadFilter: () => void
 };
 export const TableWithPagination = ({
     characters,
-    isMale,
+    isAlive,
     currentPage,
     handleNextPageClick,
     handlePrevPageClick,
     onCharacterSelect,
-    onMaleFilter,
-    onFemaleFilter,
+    onAliveFilter,
+    onDeadFilter,
 }: TableWithPaginationProps) => {
     return (
         <div className="relative overflow-x-auto sm:rounded-lg">
             <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
                 <div className="inline-flex rounded-md shadow-sm text-sm" role="group">
-                    <button disabled={isMale} onClick={onMaleFilter} className={`${isMale ? 'bg-gray-300' : 'bg-white dark:hover:bg-gray-700 dark:hover:text-white hover:bg-gray-100 hover:text-gray-900'} flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 border border-gray-300 rounded-s-lg dark:border-gray-700 dark:text-gray-700`}>Male</button>
-                    <button disabled={!isMale} onClick={onFemaleFilter} className={`${!isMale ? 'bg-gray-300' : 'bg-white dark:hover:bg-gray-700 dark:hover:text-white hover:bg-gray-100 hover:text-gray-900'} flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 border border-gray-300 rounded-e-lg dark:border-gray-700 dark:text-gray-700`}>Female</button>
+                    <button disabled={isAlive} onClick={onAliveFilter} className={`${isAlive ? 'bg-gray-300' : 'bg-white dark:hover:bg-gray-700 dark:hover:text-white hover:bg-gray-100 hover:text-gray-900'} flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 border border-gray-300 rounded-s-lg dark:border-gray-700 dark:text-gray-700`}>Alive</button>
+                    <button disabled={!isAlive} onClick={onDeadFilter} className={`${!isAlive ? 'bg-gray-300' : 'bg-white dark:hover:bg-gray-700 dark:hover:text-white hover:bg-gray-100 hover:text-gray-900'} flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 border border-gray-300 rounded-e-lg dark:border-gray-700 dark:text-gray-700`}>Dead</button>
                 </div>
 
             </div>

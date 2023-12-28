@@ -11,15 +11,14 @@ export default function Home() {
   const [isUserAuth, setUserAuth] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [gender, setGender] = useState<"Male" | "Female">("Male")
+  const [status, setStatus] = useState<"Alive" | "Dead">("Alive")
   const [characterId, setCharacterId] = useState("")
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   }
 
-  const { data: charactersData } = useSuspenseQuery<{ characters: { results: Character[] } }>(CHARACTERS_QUERY, { variables: { page: currentPage, filter: { gender: gender } } })
+  const { data: charactersData } = useSuspenseQuery<{ characters: { results: Character[] } }>(CHARACTERS_QUERY, { variables: { page: currentPage, filter: { status } } })
   const { data: characterData } = useSuspenseQuery<{ character: Character }>(CHARACTER_QUERY, { variables: { characterId: characterId }, skip: !characterId })
-
 
   const characters = charactersData?.characters?.results
   const character = characterData?.character
@@ -46,13 +45,13 @@ export default function Home() {
           <div className="bg-white p-8 flex flex-col justify-center rounded-xl border min-w-96">
             <TableWithPagination
               characters={characters}
-              isMale={gender === "Male"}
+              isAlive={status === "Alive"}
               currentPage={currentPage}
               handleNextPageClick={() => handlePageChange(currentPage + 1)}
               handlePrevPageClick={() => handlePageChange(currentPage - 1)}
               onCharacterSelect={setCharacterId}
-              onMaleFilter={() => setGender("Male")}
-              onFemaleFilter={() => setGender("Female")}
+              onAliveFilter={() => setStatus("Alive")}
+              onDeadFilter={() => setStatus("Dead")}
             />
           </div>
 
