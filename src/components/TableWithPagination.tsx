@@ -1,15 +1,26 @@
 import React from 'react';
+import { Character } from "@/services/types";
 
+type TableWithPaginationProps = {
+    characters: Character[],
+    isMale: boolean,
+    currentPage: number,
+    handleNextPageClick: () => void
+    handlePrevPageClick: () => void
+    onCharacterSelect: (id: string) => void
+    onMaleFilter: () => void
+    onFemaleFilter: () => void
+};
 export const TableWithPagination = ({
     characters,
     isMale,
     currentPage,
     handleNextPageClick,
     handlePrevPageClick,
-    onLooSelect,
+    onCharacterSelect,
     onMaleFilter,
     onFemaleFilter,
-}: any) => {
+}: TableWithPaginationProps) => {
     return (
         <div className="relative overflow-x-auto sm:rounded-lg">
             <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
@@ -31,13 +42,13 @@ export const TableWithPagination = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {characters?.map((l: any) => (
-                        <tr key={l.id} className="bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-100">
+                    {characters.map(c => (
+                        <tr key={c.id} className="bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-100">
                             <td className="px-6 py-4">
-                                {l.name}
+                                {c.name}
                             </td>
                             <td className="px-6 py-4">
-                                <button onClick={() => onLooSelect(l.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Show</button>
+                                <button onClick={() => onCharacterSelect(c.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Show</button>
                             </td>
                         </tr>))}
                 </tbody>

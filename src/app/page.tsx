@@ -2,34 +2,27 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { CHARACTERS_QUERY, CHARACTER_QUERY } from "@/services/queries/looQuery";
+import { CHARACTERS_QUERY, CHARACTER_QUERY } from "@/services/queries/characterQuery";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { Header, TableWithPagination } from "@/components";
-
-type Character = {
-  id: string;
-  name: string;
-  gender: string;
-  status: string;
-  species: string;
-}
+import { Character } from "@/services/types";
 
 export default function Home() {
   const [isUserAuth, setUserAuth] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [gender, setGender] = useState<"Male" | "Female">("Male")
-  const [looId, setLooId] = useState("")
+  const [characterId, setCharacterId] = useState("")
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   }
 
   const { data: charactersData } = useSuspenseQuery<{ characters: { results: Character[] } }>(CHARACTERS_QUERY, { variables: { page: currentPage, filter: { gender: gender } } })
-  const { data: looData } = useSuspenseQuery<{ character: Character }>(CHARACTER_QUERY, { variables: { characterId: looId }, skip: !looId })
+  const { data: characterData } = useSuspenseQuery<{ character: Character }>(CHARACTER_QUERY, { variables: { characterId: characterId }, skip: !characterId })
 
 
   const characters = charactersData?.characters?.results
-  const character = looData?.character
+  const character = characterData?.character
 
   const router = useRouter();
 
@@ -57,7 +50,7 @@ export default function Home() {
               currentPage={currentPage}
               handleNextPageClick={() => handlePageChange(currentPage + 1)}
               handlePrevPageClick={() => handlePageChange(currentPage - 1)}
-              onLooSelect={setLooId}
+              onCharacterSelect={setCharacterId}
               onMaleFilter={() => setGender("Male")}
               onFemaleFilter={() => setGender("Female")}
             />
