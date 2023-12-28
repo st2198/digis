@@ -27,3 +27,15 @@ export const LOO_BY_ID_QUERY = gql`
     }
   }
 `;
+
+export const TEST_Q = gql`
+query ExampleQuery($page: Int) {
+  characters(page: $page) {
+    results {
+      gender
+      id
+      name
+    }
+  }
+}
+`;

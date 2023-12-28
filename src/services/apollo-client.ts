@@ -9,8 +9,12 @@ import {
 } from "@apollo/experimental-nextjs-app-support/ssr";
 
 export function makeClient() {
+  // const httpLink = new HttpLink({
+  //   uri: "https://www.toiletmap.org.uk/api",
+  // });
+
   const httpLink = new HttpLink({
-    uri: "https://www.toiletmap.org.uk/api",
+    uri: "https://rickandmortyapi.com/graphql",
   });
 
   return new NextSSRApolloClient({
