@@ -11,9 +11,6 @@ import {
 export function makeClient() {
   const httpLink = new HttpLink({
       uri: "https://www.toiletmap.org.uk/api",
-      fetchOptions: {
-        mode: 'no-cors',
-      }
   });
 
   return new NextSSRApolloClient({
