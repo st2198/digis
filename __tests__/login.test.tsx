@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import Login from '../src/pages/login'
+import { render, screen, fireEvent } from '@testing-library/react'
+import Login from '../src/app/login/page'
 
 describe('Login', () => {
   it('Check for welcome message', () => {

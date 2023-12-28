@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Signup from '../src/pages/signup';
+import Signup from '../src/app/signup/page';
 
 describe('Signup', () => {
     beforeAll(() => {

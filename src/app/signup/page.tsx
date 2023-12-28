@@ -1,16 +1,29 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import { Header } from '@/components';
 
 import '../../app/globals.css'
 
-const Login = () => {
+const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const router = useRouter();
+
+    const handleSignup = () => {
+        const existingUser = localStorage.getItem(username);
+        if (existingUser) {
+            setMessage('Username already exists. Please choose a different username.');
+            return;
+        }
+
+        localStorage.setItem(username, JSON.stringify({ username, password }));
+        router.push('/login');
+    };
 
     useEffect(() => {
         const authUser = localStorage.getItem('authUser');
@@ -21,31 +34,14 @@ const Login = () => {
 
     }, [router]);
 
-    const handleLogin = () => {
-        const user = localStorage.getItem(username);
-        if (user) {
-            const userData = JSON.parse(user);
-            if (userData.password === password) {
-                localStorage.setItem('authUser', JSON.stringify({ username }));
-
-                router.push('/');
-            } else {
-                setMessage('Invalid password. Please try again.');
-            }
-        } else {
-            setMessage('User not found. Please sign up.');
-        }
-    };
-
     return (
         <div>
             <Header />
 
             <main className="flex justify-center items-center h-screen bg-gray-100 pt-16">
-                <div className="flex flex-row items-center justify-center w-full max-w-4xl">
-                    <div className="flex flex-col w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md mr-10">
-                        <h2 className="text-2xl font-bold mb-4 text-gray-900">Welcome to Loos collector!</h2>
-                        <p className="mb-6 text-gray-600">Please login to your account.</p>
+                <div className="flex flex-row items-center justify-between w-full max-w-4xl">
+                    <div className="p-6 max-w-sm w-full bg-white rounded-lg border border-gray-200 shadow-md">
+                        <h2 className="text-2xl font-bold mb-4 text-gray-900">Sign Up</h2>
                         {message && <p className="text-red-500">{message}</p>}
                         <input
                             className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
@@ -63,9 +59,9 @@ const Login = () => {
                         />
                         <button
                             className="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            onClick={handleLogin}
+                            onClick={handleSignup}
                         >
-                            Login
+                            Sign Up
                         </button>
                     </div>
 
@@ -84,4 +80,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;
