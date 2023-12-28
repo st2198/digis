@@ -14,9 +14,6 @@ export function makeClient() {
   });
 
   return new NextSSRApolloClient({
-    headers: {
-      'Origin': '*'
-    },
     cache: new NextSSRInMemoryCache(),
     link:
       typeof window === "undefined"
