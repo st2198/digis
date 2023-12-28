@@ -36,7 +36,7 @@ const Signup = () => {
 
     return (
         <Layout>
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">Welcome to Loos collector!</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Welcome to Character collector!</h2>
             <p className="mb-6 text-gray-600">Please create your account.</p>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input
