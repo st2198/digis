@@ -1,41 +1,25 @@
 import { gql } from "@apollo/client";
 
-export const LOO_QUERY = gql`
-  query LooQuery($page: Int!, $active: Boolean!) {
-    loos(filters: {active: $active}, pagination: {limit: 10, page: $page}) {
-      loos {
+export const CHARACTERS_QUERY = gql`
+  query ExampleQuery($page: Int, $filter: FilterCharacter) {
+    characters(page: $page, filter: $filter) {
+      results {
+        gender
         id
         name
-        accessible
-        allGender
-        men
-        women
       }
     }
   }
 `;
 
-export const LOO_BY_ID_QUERY = gql`
-  query LooQuery($id: ID!) {
-    loo(id: $id) {
+export const CHARACTER_QUERY = gql`
+  query Character($characterId: ID!) {
+    character(id: $characterId) {
       id
       name
-      accessible
-      allGender
-      men
-      women
-    }
-  }
-`;
-
-export const TEST_Q = gql`
-query ExampleQuery($page: Int) {
-  characters(page: $page) {
-    results {
       gender
-      id
-      name
+      status
+      species
     }
   }
-}
-`;
+`

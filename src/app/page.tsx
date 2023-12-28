@@ -2,34 +2,34 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { LOO_BY_ID_QUERY, LOO_QUERY } from "@/services/queries/looQuery";
+import { CHARACTERS_QUERY, CHARACTER_QUERY } from "@/services/queries/looQuery";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { Header, TableWithPagination } from "@/components";
 
-type Loo = {
+type Character = {
   id: string;
   name: string;
-  accessible: string;
-  allGender: string;
-  men: string;
-  women: string;
+  gender: string;
+  status: string;
+  species: string;
 }
 
 export default function Home() {
   const [isUserAuth, setUserAuth] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [isActive, setIsActive] = useState(true)
+  const [gender, setGender] = useState<"Male" | "Female">("Male")
   const [looId, setLooId] = useState("")
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   }
 
-  // const { data: loosData } = useSuspenseQuery<{ loos: { loos: Loo[] } }>(LOO_QUERY, { variables: { page: currentPage, active: isActive } })
-  // const { data: looData } = useSuspenseQuery<{ loo: Loo }>(LOO_BY_ID_QUERY, { variables: { id: looId }, skip: !looId })
+  const { data: charactersData } = useSuspenseQuery<{ characters: { results: Character[] } }>(CHARACTERS_QUERY, { variables: { page: currentPage, filter: { gender: gender } } })
+  const { data: looData } = useSuspenseQuery<{ character: Character }>(CHARACTER_QUERY, { variables: { characterId: looId }, skip: !looId })
 
-  // const loos = loosData?.loos?.loos
-  // const selectedLoo = looData?.loo
+
+  const characters = charactersData?.characters?.results
+  const character = looData?.character
 
   const router = useRouter();
 
@@ -49,31 +49,30 @@ export default function Home() {
     isUserAuth && (
       <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-gray-100">
         <Header />
-        <div className="flex gap-32">
+        <div className="flex gap-32 items-start">
           <div className="bg-white p-8 flex flex-col justify-center rounded-xl border min-w-96">
-            {/* <TableWithPagination
-              loos={loos}
-              isActive={isActive}
+            <TableWithPagination
+              characters={characters}
+              isMale={gender === "Male"}
               currentPage={currentPage}
               handleNextPageClick={() => handlePageChange(currentPage + 1)}
               handlePrevPageClick={() => handlePageChange(currentPage - 1)}
               onLooSelect={setLooId}
-              onActiveFilter={() => setIsActive(true)}
-              onNotActiveFilter={() => setIsActive(false)}
-            /> */}
+              onMaleFilter={() => setGender("Male")}
+              onFemaleFilter={() => setGender("Female")}
+            />
           </div>
 
-          {/* <div className={`bg-white p-8 flex flex-col justify-center items-center rounded-xl border min-w-96 ${selectedLoo ? '' : 'invisible'}`}>
-            {selectedLoo && (
+          <div className={`bg-white p-8 flex flex-col justify-center items-center rounded-xl border min-w-96 ${character ? '' : 'invisible'}`}>
+            {character && (
               <>
-                <h2>{selectedLoo.name}</h2>
-                <p>Accessible: {selectedLoo.accessible ? '✅' : '❌'}</p>
-                <p>All Gender: {selectedLoo.allGender ? '✅' : '❌'}</p>
-                <p>Men: {selectedLoo.men ? '✅' : '❌'}</p>
-                <p>Women: {selectedLoo.women ? '✅' : '❌'}</p>
+                <h2>{character.name}</h2>
+                <p>Gender: {character.gender}</p>
+                <p>Species: {character.species}</p>
+                <p>Status: {character.status}</p>
               </>
             )}
-          </div> */}
+          </div>
         </div>
       </main>
     )
