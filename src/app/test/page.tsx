@@ -7,7 +7,7 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { Layout } from '@/components/Layout';
 import { TEST_Q } from '@/services/queries/looQuery';
 
-const Login = () => {
+const Test = () => {
     const [page, setPage] = useState(1);
     const { data: loosData } = useSuspenseQuery<{ loos: { chars: any } }>(TEST_Q, { variables: { page } })
     //   const { data: looData } = useSuspenseQuery<{ loo: Loo }>(LOO_BY_ID_QUERY, { variables: { id: looId }, skip: !looId })
@@ -25,4 +25,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Test;

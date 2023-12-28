@@ -25,11 +25,11 @@ export default function Home() {
     setCurrentPage(newPage);
   }
 
-  const { data: loosData } = useSuspenseQuery<{ loos: { loos: Loo[] } }>(LOO_QUERY, { variables: { page: currentPage, active: isActive } })
-  const { data: looData } = useSuspenseQuery<{ loo: Loo }>(LOO_BY_ID_QUERY, { variables: { id: looId }, skip: !looId })
+  // const { data: loosData } = useSuspenseQuery<{ loos: { loos: Loo[] } }>(LOO_QUERY, { variables: { page: currentPage, active: isActive } })
+  // const { data: looData } = useSuspenseQuery<{ loo: Loo }>(LOO_BY_ID_QUERY, { variables: { id: looId }, skip: !looId })
 
-  const loos = loosData?.loos?.loos
-  const selectedLoo = looData?.loo
+  // const loos = loosData?.loos?.loos
+  // const selectedLoo = looData?.loo
 
   const router = useRouter();
 
@@ -51,7 +51,7 @@ export default function Home() {
         <Header />
         <div className="flex gap-32">
           <div className="bg-white p-8 flex flex-col justify-center rounded-xl border min-w-96">
-            <TableWithPagination
+            {/* <TableWithPagination
               loos={loos}
               isActive={isActive}
               currentPage={currentPage}
@@ -60,10 +60,10 @@ export default function Home() {
               onLooSelect={setLooId}
               onActiveFilter={() => setIsActive(true)}
               onNotActiveFilter={() => setIsActive(false)}
-            />
+            /> */}
           </div>
 
-          <div className={`bg-white p-8 flex flex-col justify-center items-center rounded-xl border min-w-96 ${selectedLoo ? '' : 'invisible'}`}>
+          {/* <div className={`bg-white p-8 flex flex-col justify-center items-center rounded-xl border min-w-96 ${selectedLoo ? '' : 'invisible'}`}>
             {selectedLoo && (
               <>
                 <h2>{selectedLoo.name}</h2>
@@ -73,7 +73,7 @@ export default function Home() {
                 <p>Women: {selectedLoo.women ? '✅' : '❌'}</p>
               </>
             )}
-          </div>
+          </div> */}
         </div>
       </main>
     )
