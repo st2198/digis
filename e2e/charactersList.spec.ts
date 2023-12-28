@@ -26,8 +26,6 @@ test('signup and login process', async ({ page }) => {
   await page.click('button:text("Login")');
   // Wait for navigation to complete
 
-  await page.waitForURL('http://localhost:3000/');
-
   await page.waitForTimeout(1000);
 
   // 13. Check for redirection to home page

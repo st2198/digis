@@ -1,44 +1,20 @@
 "use client";
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-
-import { AuthFormType } from '@/services/types';
-import { usernameValidation, passwordValidation } from '@/services/validationRules';
+import React from 'react';
 import { Layout } from '@/components/Layout';
+import { useSignupForm } from './useSignupForm';
+import { useAuthRedirect } from '@/hooks/useAuthRedirect';
+import { passwordValidation, usernameValidation } from '@/services/validationRules';
 
 const Signup = () => {
-    const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthFormType>();
-    const router = useRouter();
-
-    const onSubmit = (data: AuthFormType) => {
-        const { username, password } = data;
-        const existingUser = localStorage.getItem(username);
-        if (existingUser) {
-            setError('username', {
-                type: 'manual',
-                message: 'Username already exists. Please choose a different username.'
-              });
-            return;
-        }
-
-        localStorage.setItem(username, JSON.stringify({ username, password }));
-        router.push('/login');
-    };
-
-    useEffect(() => {
-        const authUser = localStorage.getItem('authUser');
-        if (authUser) {
-            router.push('/');
-        }
-    }, [router]);
+    const { register, handleSubmit, errors } = useSignupForm(); 
+    useAuthRedirect('/'); 
 
     return (
         <Layout>
             <h2 className="text-2xl font-bold mb-4 text-gray-900">Welcome to Character collector!</h2>
             <p className="mb-6 text-gray-600">Please create your account.</p>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit}>
                 <input
                     {...register('username', usernameValidation)}
                     className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
