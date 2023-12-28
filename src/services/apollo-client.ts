@@ -10,22 +10,22 @@ import {
 
 export function makeClient() {
   const httpLink = new HttpLink({
-      uri: "https://www.toiletmap.org.uk/api",
-      headers: {
-        'Origin': 'https://digis.vercel.app'
-      }
+    uri: "https://www.toiletmap.org.uk/api",
   });
 
   return new NextSSRApolloClient({
+    headers: {
+      'Origin': '*'
+    },
     cache: new NextSSRInMemoryCache(),
     link:
       typeof window === "undefined"
         ? ApolloLink.from([
-            new SSRMultipartLink({
-              stripDefer: true,
-            }),
-            httpLink,
-          ])
+          new SSRMultipartLink({
+            stripDefer: true,
+          }),
+          httpLink,
+        ])
         : httpLink,
   });
 }
