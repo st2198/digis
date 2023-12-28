@@ -11,8 +11,8 @@ import {
 export function makeClient() {
   const httpLink = new HttpLink({
       uri: "https://www.toiletmap.org.uk/api",
-      headers: {
-        'Access-Control-Allow-Origin': '*'
+      fetchOptions: {
+        mode: 'no-cors',
       }
   });
 
