@@ -8,7 +8,7 @@ import { passwordValidation, usernameValidation } from '@/services/validationRul
 
 const Login = () => {
     const { register, handleSubmit, errors } = useLoginForm();
-    useAuthRedirect('/');
+    useAuthRedirect();
 
     return (
         <Layout>

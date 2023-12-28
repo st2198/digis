@@ -8,7 +8,7 @@ import { useCharacterData } from '@/hooks/useCharacterData';
 import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 
 const Home = () => {
-  const isUserAuth = useAuthRedirect('/login');
+  const isUserAuth = useAuthRedirect();
   const { currentPage, handlePageChange, status, setStatus } = useCharacterPagination();
   const [characterId, setCharacterId] = useState("");
   const { characters, character } = useCharacterData(currentPage, status, characterId);
