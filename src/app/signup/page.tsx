@@ -1,23 +1,25 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useForm } from 'react-hook-form';
 
-import { Header } from '@/components';
-
-import '../../app/globals.css'
+import { AuthFormType } from '@/services/types';
+import { usernameValidation, passwordValidation } from '@/services/validationRules';
+import Layout from '@/components/Layout';
 
 const Signup = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthFormType>();
     const router = useRouter();
 
-    const handleSignup = () => {
+    const onSubmit = (data: AuthFormType) => {
+        const { username, password } = data;
         const existingUser = localStorage.getItem(username);
         if (existingUser) {
-            setMessage('Username already exists. Please choose a different username.');
+            setError('username', {
+                type: 'manual',
+                message: 'Username already exists. Please choose a different username.'
+              });
             return;
         }
 
@@ -27,56 +29,40 @@ const Signup = () => {
 
     useEffect(() => {
         const authUser = localStorage.getItem('authUser');
-
         if (authUser) {
             router.push('/');
         }
-
     }, [router]);
 
     return (
-        <div>
-            <Header />
+        <Layout>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Welcome to Loos collector!</h2>
+            <p className="mb-6 text-gray-600">Please create your account.</p>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                    {...register('username', usernameValidation)}
+                    className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
+                    type="text"
+                    placeholder="Username"
+                />
+                {errors.username && <p className="text-red-500">{errors.username.message}</p>}
 
-            <main className="flex justify-center items-center h-screen bg-gray-100 pt-16">
-                <div className="flex flex-row items-center justify-between w-full max-w-4xl">
-                    <div className="p-6 max-w-sm w-full bg-white rounded-lg border border-gray-200 shadow-md">
-                        <h2 className="text-2xl font-bold mb-4 text-gray-900">Sign Up</h2>
-                        {message && <p className="text-red-500">{message}</p>}
-                        <input
-                            className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <input
-                            className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <button
-                            className="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            onClick={handleSignup}
-                        >
-                            Sign Up
-                        </button>
-                    </div>
+                <input
+                    {...register('password', passwordValidation)}
+                    className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
+                    type="password"
+                    placeholder="Password"
+                />
+                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
 
-                    <div className="hidden md:flex items-center justify-center rounded-lg">
-                        <Image
-                            src="/xmas.jpg"
-                            width={400}
-                            height={280}
-                            alt="Christmas tree picture"
-                            className="rounded-lg shadow-sm"
-                        />
-                    </div>
-                </div>
-            </main>
-        </div>
+                <button
+                    type="submit"
+                    className="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                    Sign Up
+                </button>
+            </form>
+        </Layout>
     );
 };
 

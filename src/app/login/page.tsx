@@ -1,88 +1,72 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useForm } from 'react-hook-form';
 
-import { Header } from '@/components';
-
-import '../../app/globals.css'
+import { AuthFormType } from '@/services/types';
+import Layout from '@/components/Layout';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<AuthFormType>();
     const router = useRouter();
 
-    useEffect(() => {
-        const authUser = localStorage.getItem('authUser');
-
-        if (authUser) {
-            router.push('/');
-        }
-
-    }, [router]);
-
-    const handleLogin = () => {
+    const onSubmit = (data: AuthFormType) => {
+        const { username, password } = data;
         const user = localStorage.getItem(username);
         if (user) {
             const userData = JSON.parse(user);
             if (userData.password === password) {
                 localStorage.setItem('authUser', JSON.stringify({ username }));
-
                 router.push('/');
             } else {
-                setMessage('Invalid password. Please try again.');
+                setError('username', {
+                    type: 'manual',
+                    message: 'Invalid password. Please try again.'
+                  });
             }
         } else {
-            setMessage('User not found. Please sign up.');
+            setError('username', {
+                type: 'manual',
+                message: 'User not found. Please sign up.'
+              });
         }
     };
 
+    useEffect(() => {
+        const authUser = localStorage.getItem('authUser');
+        if (authUser) {
+            router.push('/');
+        }
+    }, [router]);
+
     return (
-        <div>
-            <Header />
-
-            <main className="flex justify-center items-center h-screen bg-gray-100 pt-16">
-                <div className="flex flex-row items-center justify-center w-full max-w-4xl">
-                    <div className="flex flex-col w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md mr-10">
-                        <h2 className="text-2xl font-bold mb-4 text-gray-900">Welcome to Loos collector!</h2>
-                        <p className="mb-6 text-gray-600">Please login to your account.</p>
-                        {message && <p className="text-red-500">{message}</p>}
-                        <input
-                            className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <input
-                            className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <button
-                            className="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            onClick={handleLogin}
-                        >
-                            Login
-                        </button>
-                    </div>
-
-                    <div className="hidden md:flex items-center justify-center rounded-lg">
-                        <Image
-                            src="/xmas.jpg"
-                            width={400}
-                            height={280}
-                            alt="Christmas tree picture"
-                            className="rounded-lg shadow-sm"
-                        />
-                    </div>
-                </div>
-            </main>
-        </div>
+        <Layout>
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">Welcome to Loos collector!</h2>
+            <p className="mb-6 text-gray-600">Please login to your account.</p>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                    {...register('username', { required: 'Username is required' })}
+                    className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
+                    type="text"
+                    placeholder="Username"
+                />
+                {errors.username && <p className="text-red-500">{errors.username.message}</p>}
+                <input
+                    {...register('password', { required: 'Password is required' })}
+                    className="w-full px-3 py-2 mb-3 border border-gray-300 rounded-md text-black"
+                    type="password"
+                    placeholder="Password"
+                />
+                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                <button
+                    type="submit"
+                    className="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                    Login
+                </button>
+            </form>
+        </Layout>
     );
 };
 
