@@ -12,6 +12,7 @@ test('signup and login process', async ({ page }) => {
   await page.click('button:text("Sign Up")');
 
   // Wait for navigation to complete
+  
   await page.waitForLoadState('networkidle');
 
   // 7. Check for text 'Welcome'
@@ -24,7 +25,10 @@ test('signup and login process', async ({ page }) => {
   // 12. Click 'Login' button
   await page.click('button:text("Login")');
   // Wait for navigation to complete
-  await page.waitForLoadState('networkidle');
+
+  await page.waitForURL('http://localhost:3000/');
+
+  // await page.waitForTimeout(1000);
 
   // 13. Check for redirection to home page
   expect(page.url()).toBe('http://localhost:3000/');
